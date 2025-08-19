@@ -14,10 +14,6 @@
             background-color: #F97316;
             border-color: #F97316;
         }
-        .form-radio:checked {
-            background-color: #3B82F6;
-            border-color: #3B82F6;
-        }
         /* Custom scrollbar for better aesthetics */
         .date-container::-webkit-scrollbar {
             width: 8px;
@@ -54,13 +50,14 @@
             <div class="mb-8 p-4 border border-blue-200 bg-blue-50 rounded-lg">
                 <h2 class="text-2xl font-bold text-blue-800 mb-3">報名須知</h2>
                 <ul class="list-disc list-inside space-y-2 text-gray-700">
-                    <li><span class="font-semibold">上課方式：</span>採小班制，一位教練授課4至6位球員。歡迎自組隊伍報名。</li>
+                    <li><span class="font-semibold">上課方式：</span>採小班制，一位教練授課4至6位球員。</li>
                     <li><span class="font-semibold">上課費用：</span>
                         <ul class="list-['-_'] list-inside ml-4">
                             <li>早班 (10:30-12:00): <span class="font-bold text-orange-600">1200元/人</span></li>
                             <li>午班 (12:30-14:30): <span class="font-bold text-orange-600">1500元/人</span></li>
                         </ul>
                     </li>
+                    <li><span class="font-semibold">優惠方案：</span>一次報名 <span class="font-bold text-green-600">20</span> 堂課(含)以上，總費用享 <span class="font-bold text-green-600">9折</span> 優惠。</li>
                 </ul>
             </div>
 
@@ -106,30 +103,20 @@
                 </div>
 
                 <!-- Class Selection -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">選擇上課時段與日期 *</label>
-                    <div class="flex items-center space-x-4 mb-4">
-                        <label class="flex items-center">
-                            <input type="radio" name="session" value="morning" required class="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
-                            <span class="ml-2 text-gray-700">早班 (10:30 - 12:00)</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="radio" name="session" value="afternoon" class="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
-                            <span class="ml-2 text-gray-700">午班 (12:30 - 14:30)</span>
-                        </label>
-                    </div>
-
-                    <!-- Date Checkboxes -->
-                    <div id="date-selection-container" class="p-4 border border-gray-200 bg-gray-50 rounded-md hidden">
-                        <div id="morning-dates" class="hidden">
-                            <p class="font-semibold mb-2 text-gray-800">請選擇早班日期：</p>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 date-container max-h-48 overflow-y-auto pr-2">
+                <div class="mb-6 p-4 border border-gray-200 bg-gray-50 rounded-md">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">選擇上課日期 *</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                        <!-- Morning Dates -->
+                        <div>
+                            <p class="font-semibold mb-2 text-gray-800">早班 (10:30 - 12:00)</p>
+                            <div id="morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
                                 <!-- Morning dates will be injected here by JS -->
                             </div>
                         </div>
-                        <div id="afternoon-dates" class="hidden">
-                            <p class="font-semibold mb-2 text-gray-800">請選擇午班日期：</p>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 date-container max-h-48 overflow-y-auto pr-2">
+                        <!-- Afternoon Dates -->
+                        <div>
+                            <p class="font-semibold mb-2 text-gray-800">午班 (12:30 - 14:30)</p>
+                            <div id="afternoon-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
                                 <!-- Afternoon dates will be injected here by JS -->
                             </div>
                         </div>
@@ -140,6 +127,8 @@
                 <div id="fee-summary" class="mb-6 p-4 border-l-4 border-orange-500 bg-orange-50 rounded-md hidden">
                     <h3 class="text-lg font-bold text-gray-800">費用總計</h3>
                     <p class="text-gray-600">已選擇 <span id="selected-count" class="font-bold text-blue-600">0</span> 堂課</p>
+                    <p id="discount-info" class="text-green-600 text-sm font-semibold hidden">已套用20堂課9折優惠！</p>
+                    <p class="text-gray-800 mt-2">原始費用: <span id="original-fee" class="font-semibold line-through">0</span> 元</p>
                     <p class="text-2xl font-bold text-orange-600 mt-1">應繳總額: <span id="total-fee">0</span> 元</p>
                 </div>
 
@@ -185,16 +174,18 @@
             
             const morningFee = 1200;
             const afternoonFee = 1500;
+            const discountThreshold = 20;
+            const discountRate = 0.9;
 
             // --- DOM ELEMENTS ---
             const form = document.getElementById('registrationForm');
-            const sessionRadios = document.querySelectorAll('input[name="session"]');
-            const dateSelectionContainer = document.getElementById('date-selection-container');
-            const morningDatesContainer = document.getElementById('morning-dates').querySelector('.grid');
-            const afternoonDatesContainer = document.getElementById('afternoon-dates').querySelector('.grid');
+            const morningDatesContainer = document.getElementById('morning-dates');
+            const afternoonDatesContainer = document.getElementById('afternoon-dates');
             const feeSummary = document.getElementById('fee-summary');
             const selectedCountEl = document.getElementById('selected-count');
+            const originalFeeEl = document.getElementById('original-fee');
             const totalFeeEl = document.getElementById('total-fee');
+            const discountInfo = document.getElementById('discount-info');
             const submitButton = document.getElementById('submit-button');
             const submitText = document.getElementById('submit-text');
             const submitSpinner = document.getElementById('submit-spinner');
@@ -208,22 +199,11 @@
 
             // --- FUNCTIONS ---
 
-            /**
-             * 根據 "月/日" 格式的字串，回傳中文的星期幾 (timezone-safe)
-             * @param {string} dateStr - e.g., "9/6"
-             * @returns {string} - e.g., "週六"
-             */
             function getDayOfWeek(dateStr) {
                 const [month, day] = dateStr.split('/').map(Number);
-                // 根據課程時間跨度，自動判斷年份 (9-12月為2024, 1月為2025)
                 const year = month >= 9 ? 2024 : 2025;
-                
-                // 建立一個 UTC 日期來避免時區問題
                 const dateObj = new Date(Date.UTC(year, month - 1, day));
-                
-                // 使用 getUTCDay() 來確保無論在哪個時區，都能得到正確的星期數值
-                const dayIndex = dateObj.getUTCDay(); // 0=週日, 1=週一, ..., 6=週六
-                
+                const dayIndex = dateObj.getUTCDay();
                 const days = ['一', '二', '三', '四', '五', '六', '日'];
                 return `週${days[dayIndex]}`;
             }
@@ -236,7 +216,7 @@
                     const input = document.createElement('input');
                     input.type = 'checkbox';
                     input.id = `${sessionName}-${date.replace('/', '-')}`;
-                    input.name = 'selectedDates';
+                    input.name = `${sessionName}Dates`; // Differentiate morning and afternoon dates
                     input.value = date;
                     input.className = 'form-checkbox h-4 w-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500';
                     
@@ -253,20 +233,38 @@
             }
 
             function calculateFee() {
-                const selectedSession = document.querySelector('input[name="session"]:checked');
-                if (!selectedSession) return;
-
-                const selectedDates = document.querySelectorAll('input[name="selectedDates"]:checked');
-                const count = selectedDates.length;
-                const feePerClass = selectedSession.value === 'morning'
-                    ? morningFee
-                    : afternoonFee;
+                const selectedMorning = document.querySelectorAll('input[name="morningDates"]:checked');
+                const selectedAfternoon = document.querySelectorAll('input[name="afternoonDates"]:checked');
                 
-                let totalFee = count * feePerClass;
+                const morningCount = selectedMorning.length;
+                const afternoonCount = selectedAfternoon.length;
+                const totalCount = morningCount + afternoonCount;
 
-                feeSummary.classList.toggle('hidden', count === 0);
-                selectedCountEl.textContent = count;
-                totalFeeEl.textContent = totalFee;
+                if (totalCount === 0) {
+                    feeSummary.classList.add('hidden');
+                    return;
+                }
+
+                feeSummary.classList.remove('hidden');
+                selectedCountEl.textContent = totalCount;
+
+                const originalMorningFee = morningCount * morningFee;
+                const originalAfternoonFee = afternoonCount * afternoonFee;
+                const originalTotalFee = originalMorningFee + originalAfternoonFee;
+
+                let finalTotalFee = originalTotalFee;
+
+                if (totalCount >= discountThreshold) {
+                    finalTotalFee = Math.round(originalTotalFee * discountRate);
+                    discountInfo.classList.remove('hidden');
+                    originalFeeEl.parentElement.classList.remove('hidden'); // Show original fee line
+                    originalFeeEl.textContent = originalTotalFee;
+                } else {
+                    discountInfo.classList.add('hidden');
+                    originalFeeEl.parentElement.classList.add('hidden'); // Hide original fee line
+                }
+                
+                totalFeeEl.textContent = finalTotalFee;
             }
 
             function showModal(type, title, message) {
@@ -284,30 +282,22 @@
             }
 
             // --- EVENT LISTENERS ---
-
-            sessionRadios.forEach(radio => {
-                radio.addEventListener('change', () => {
-                    dateSelectionContainer.classList.remove('hidden');
-                    const isMorning = radio.value === 'morning';
-                    document.getElementById('morning-dates').classList.toggle('hidden', !isMorning);
-                    document.getElementById('afternoon-dates').classList.toggle('hidden', isMorning);
-                    const allCheckboxes = dateSelectionContainer.querySelectorAll('input[type="checkbox"]');
-                    allCheckboxes.forEach(cb => cb.checked = false);
-                    calculateFee();
-                });
-            });
-
-            dateSelectionContainer.addEventListener('change', (e) => {
-                if (e.target.name === 'selectedDates') {
+            form.addEventListener('change', (e) => {
+                if (e.target.name === 'morningDates' || e.target.name === 'afternoonDates') {
                     calculateFee();
                 }
             });
 
-            form.addEventListener('submit', function (e) {
+            // *** BUG FIX: Changed to async function for sequential submission ***
+            form.addEventListener('submit', async function (e) {
                 e.preventDefault();
 
-                const selectedDateElements = document.querySelectorAll('input[name="selectedDates"]:checked');
-                if (selectedDateElements.length === 0) {
+                const selectedMorning = document.querySelectorAll('input[name="morningDates"]:checked');
+                const selectedAfternoon = document.querySelectorAll('input[name="afternoonDates"]:checked');
+                
+                const totalCount = selectedMorning.length + selectedAfternoon.length;
+
+                if (totalCount === 0) {
                     showModal('error', '報名錯誤', '請至少選擇 1 堂課。');
                     return;
                 }
@@ -323,50 +313,62 @@
 
                 const formData = new FormData(form);
                 const baseData = Object.fromEntries(formData.entries());
-                delete baseData.selectedDates;
+                delete baseData.morningDates;
+                delete baseData.afternoonDates;
                 
-                const selectedSession = document.querySelector('input[name="session"]:checked');
-                const feePerClass = selectedSession.value === 'morning'
-                    ? morningFee
-                    : afternoonFee;
+                const applyDiscount = totalCount >= discountThreshold;
+                
+                const recordsToSend = [];
 
-                const datesToSubmit = Array.from(selectedDateElements).map(cb => cb.value);
-
-                const submissionPromises = datesToSubmit.map(date => {
-                    const record = {
+                // Prepare all morning class records
+                selectedMorning.forEach(checkbox => {
+                    recordsToSend.push({
                         ...baseData,
-                        classDate: date,
-                        classFee: feePerClass,
+                        session: 'morning',
+                        classDate: checkbox.value,
+                        classFee: applyDiscount ? Math.round(morningFee * discountRate) : morningFee,
                         timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })
-                    };
-
-                    return fetch(GOOGLE_APPS_SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        cache: 'no-cache',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(record)
                     });
                 });
 
-                Promise.all(submissionPromises)
-                    .then(() => {
-                        showModal('success', '報名成功！', `您已成功報名 ${datesToSubmit.length} 堂課。我們將盡快與您聯繫確認。`);
-                        form.reset();
-                        feeSummary.classList.add('hidden');
-                        dateSelectionContainer.classList.add('hidden');
-                        document.getElementById('morning-dates').classList.add('hidden');
-                        document.getElementById('afternoon-dates').classList.add('hidden');
-                    })
-                    .catch(error => {
-                        console.error('Submission Error:', error);
-                        showModal('error', '報名失敗', '部分或全部資料提交失敗，請稍後再試或直接與我們聯繫。');
-                    })
-                    .finally(() => {
-                        submitButton.disabled = false;
-                        submitText.classList.remove('hidden');
-                        submitSpinner.classList.add('hidden');
+                // Prepare all afternoon class records
+                selectedAfternoon.forEach(checkbox => {
+                    recordsToSend.push({
+                        ...baseData,
+                        session: 'afternoon',
+                        classDate: checkbox.value,
+                        classFee: applyDiscount ? Math.round(afternoonFee * discountRate) : afternoonFee,
+                        timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })
                     });
+                });
+
+                // Send records one by one to avoid server overload
+                try {
+                    for (const record of recordsToSend) {
+                        await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            cache: 'no-cache',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(record)
+                        });
+                        // Optional: add a small delay between requests if needed
+                        // await new Promise(resolve => setTimeout(resolve, 50)); 
+                    }
+                    
+                    // If all submissions are sent
+                    showModal('success', '報名成功！', `您已成功報名 ${totalCount} 堂課。我們將盡快與您聯繫確認。`);
+                    form.reset();
+                    feeSummary.classList.add('hidden');
+
+                } catch (error) {
+                    console.error('Submission Error:', error);
+                    showModal('error', '報名失敗', '部分或全部資料提交失敗，請稍後再試或直接與我們聯繫。');
+                } finally {
+                    submitButton.disabled = false;
+                    submitText.classList.remove('hidden');
+                    submitSpinner.classList.add('hidden');
+                }
             });
 
             closeModalBtn.addEventListener('click', () => {
