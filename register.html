@@ -167,7 +167,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // --- CONFIGURATION ---
-            const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx640TOpXKy5upQkhFAYacl2hXuAbiXm8uCVt373IDToe7gxhWEP_x5i-EAfnfxGO-ZjQ/exec';
+            const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywXCfspGojVj_vv1lV4p_ASVmXDG5MJr1zXZCQ9OK1e_Gk-0kypu33YzmRnSaBBoaEoA/exec';
+            //const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx640TOpXKy5upQkhFAYacl2hXuAbiXm8uCVt373IDToe7gxhWEP_x5i-EAfnfxGO-ZjQ/exec';
 
             const morningDates = ['9/6', '9/7', '9/14', '9/27', '9/28', '10/4', '10/5', '10/12', '10/25', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
             const afternoonDates = ['9/13', '9/14', '9/27', '9/28', '10/25', '10/26', '11/16', '11/22', '11/23', '12/6', '12/7', '1/10', '1/11'];
@@ -367,22 +368,30 @@
 
                 // Send records one by one to avoid server overload
                 try {
-                    for (const record of recordsToSend) {
-                        await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    //for (const record of recordsToSend) {
+                        const res = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                             method: 'POST',
-                            mode: 'no-cors',
+                            //mode: 'no-cors',
                             cache: 'no-cache',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(record)
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: new URLSearchParams({ record: JSON.stringify(recordsToSend) }),
+                            //body: JSON.stringify(recordsToSend)
                         });
                         // Optional: add a small delay between requests if needed
                         // await new Promise(resolve => setTimeout(resolve, 50)); 
-                    }
+                    //}
                     
+                    //
+                    //const text = await res.text();
+                    const data = await res.json();
+                    if (data.status === 'success') {
                     // If all submissions are sent
-                    showModal('success', '報名成功！', `您已成功報名 ${totalCount} 堂課。我們將盡快與您聯繫確認。`);
-                    form.reset();
-                    feeSummary.classList.add('hidden');
+                        showModal('success', '報名成功！', `您已成功報名 ${totalCount} 堂課。我們將盡快與您聯繫確認。`);
+                        form.reset();
+                        feeSummary.classList.add('hidden');
+                    } else {
+                        throw new Error(`Server error! response: ${JSON.stringify(data)}`);
+                    }
 
                 } catch (error) {
                     console.error('Submission Error:', error);
