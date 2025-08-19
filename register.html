@@ -201,10 +201,14 @@
 
             function getDayOfWeek(dateStr) {
                 const [month, day] = dateStr.split('/').map(Number);
-                const year = month >= 9 ? 2024 : 2025;
+                // *** BUG FIX: Correctly set year for cross-year courses ***
+                // Based on current date of 2025, courses in Sep-Dec are 2025, Jan is 2026.
+                const currentYear = new Date().getFullYear(); // e.g., 2025
+                const year = month >= 9 ? currentYear : currentYear + 1;
+                
                 const dateObj = new Date(Date.UTC(year, month - 1, day));
                 const dayIndex = dateObj.getUTCDay();
-                const days = ['一', '二', '三', '四', '五', '六', '日'];
+                const days = ['日', '一', '二', '三', '四', '五', '六'];
                 return `週${days[dayIndex]}`;
             }
 
@@ -322,10 +326,19 @@
 
                 // Prepare all morning class records
                 selectedMorning.forEach(checkbox => {
+                    // 解析 month/date
+                    const [month, day] = checkbox.value.split("/").map(Number);
+
+                    // 決定年份
+                    const year = (month >= 9 && month <= 12) ? 2025 : 2026;
+
+                    // 組合成 YYYY-MM-DD 格式
+                    const fullDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
                     recordsToSend.push({
                         ...baseData,
                         session: 'morning',
-                        classDate: checkbox.value,
+                        classDate: fullDate,
                         classFee: applyDiscount ? Math.round(morningFee * discountRate) : morningFee,
                         timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })
                     });
@@ -333,10 +346,20 @@
 
                 // Prepare all afternoon class records
                 selectedAfternoon.forEach(checkbox => {
+                    // 解析 month/date
+                    const [month, day] = checkbox.value.split("/").map(Number);
+
+                    // 決定年份
+                    const year = (month >= 9 && month <= 12) ? 2025 : 2026;
+
+                    // 組合成 YYYY-MM-DD 格式
+                    const fullDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
                     recordsToSend.push({
                         ...baseData,
                         session: 'afternoon',
-                        classDate: checkbox.value,
+                        //classDate: checkbox.value,
+                        classDate: fullDate,
                         classFee: applyDiscount ? Math.round(afternoonFee * discountRate) : afternoonFee,
                         timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })
                     });
