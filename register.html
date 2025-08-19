@@ -212,7 +212,6 @@
 
             // --- FUNCTIONS ---
 
-            // Function to populate date checkboxes
             function populateDates(container, dates, sessionName) {
                 container.innerHTML = '';
                 dates.forEach(date => {
@@ -234,7 +233,6 @@
                 });
             }
 
-            // Function to calculate and display fees
             function calculateFee() {
                 const selectedSession = document.querySelector('input[name="session"]:checked');
                 if (!selectedSession) return;
@@ -245,14 +243,11 @@
                 
                 let totalFee = count * feePerClass;
 
-                // Show/hide fee summary
                 feeSummary.classList.toggle('hidden', count === 0);
-                
                 selectedCountEl.textContent = count;
                 totalFeeEl.textContent = totalFee;
             }
 
-            // Function to show modal message
             function showModal(type, title, message) {
                 messageModal.classList.remove('hidden');
                 modalTitle.textContent = title;
@@ -262,41 +257,36 @@
                     modalIcon.innerHTML = `<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
                     modalIcon.className = 'mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-500';
                 } else {
-                    modalIcon.innerHTML = `<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                    modalIcon.innerHTML = `<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h._01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
                     modalIcon.className = 'mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-500';
                 }
             }
 
             // --- EVENT LISTENERS ---
 
-            // Handle session change
             sessionRadios.forEach(radio => {
                 radio.addEventListener('change', () => {
                     dateSelectionContainer.classList.remove('hidden');
                     const isMorning = radio.value === 'morning';
                     document.getElementById('morning-dates').classList.toggle('hidden', !isMorning);
                     document.getElementById('afternoon-dates').classList.toggle('hidden', isMorning);
-                    // Reset checkboxes and recalculate fee when session changes
                     const allCheckboxes = dateSelectionContainer.querySelectorAll('input[type="checkbox"]');
                     allCheckboxes.forEach(cb => cb.checked = false);
                     calculateFee();
                 });
             });
 
-            // Handle date selection change
             dateSelectionContainer.addEventListener('change', (e) => {
                 if (e.target.name === 'selectedDates') {
                     calculateFee();
                 }
             });
 
-            // Handle form submission
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
 
-                // Validation
-                const selectedDates = document.querySelectorAll('input[name="selectedDates"]:checked');
-                if (selectedDates.length === 0) {
+                const selectedDateElements = document.querySelectorAll('input[name="selectedDates"]:checked');
+                if (selectedDateElements.length === 0) {
                     showModal('error', '報名錯誤', '請至少選擇 1 堂課。');
                     return;
                 }
@@ -306,51 +296,58 @@
                     return;
                 }
 
-                // Disable button and show spinner
                 submitButton.disabled = true;
                 submitText.classList.add('hidden');
                 submitSpinner.classList.remove('hidden');
 
                 const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
+                const baseData = Object.fromEntries(formData.entries());
+                delete baseData.selectedDates; // 從基礎資料中移除，因為我們要逐一處理
                 
-                // Get all selected dates
-                data.selectedDates = Array.from(selectedDates).map(cb => cb.value).join(', ');
-                data.totalFee = totalFeeEl.textContent;
-                data.timestamp = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
+                const selectedSession = document.querySelector('input[name="session"]:checked');
+                const feePerClass = selectedSession.value === 'morning' ? morningFee : afternoonFee;
 
+                const datesToSubmit = Array.from(selectedDateElements).map(cb => cb.value);
 
-                fetch(GOOGLE_APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Important for simple POST requests to Apps Script
-                    cache: 'no-cache',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => {
-                    // Because of no-cors mode, we can't read the response. We assume success.
-                    showModal('success', '報名成功！', '我們已收到您的報名資料，將盡快與您聯繫確認。');
-                    form.reset();
-                    feeSummary.classList.add('hidden');
-                    dateSelectionContainer.classList.add('hidden');
-                    document.getElementById('morning-dates').classList.add('hidden');
-                    document.getElementById('afternoon-dates').classList.add('hidden');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showModal('error', '報名失敗', '發生未知的錯誤，請稍後再試或直接與我們聯繫。');
-                })
-                .finally(() => {
-                    // Re-enable button
-                    submitButton.disabled = false;
-                    submitText.classList.remove('hidden');
-                    submitSpinner.classList.add('hidden');
+                // 為每個選定的日期建立一個 promise
+                const submissionPromises = datesToSubmit.map(date => {
+                    const record = {
+                        ...baseData,
+                        classDate: date, // 使用新的欄位名稱 'classDate'
+                        classFee: feePerClass, // 傳送單堂費用
+                        timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })
+                    };
+
+                    return fetch(GOOGLE_APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        cache: 'no-cache',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(record)
+                    });
                 });
+
+                // 等待所有 promise 完成
+                Promise.all(submissionPromises)
+                    .then(() => {
+                        showModal('success', '報名成功！', `您已成功報名 ${datesToSubmit.length} 堂課。我們將盡快與您聯繫確認。`);
+                        form.reset();
+                        feeSummary.classList.add('hidden');
+                        dateSelectionContainer.classList.add('hidden');
+                        document.getElementById('morning-dates').classList.add('hidden');
+                        document.getElementById('afternoon-dates').classList.add('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Submission Error:', error);
+                        showModal('error', '報名失敗', '部分或全部資料提交失敗，請稍後再試或直接與我們聯繫。');
+                    })
+                    .finally(() => {
+                        submitButton.disabled = false;
+                        submitText.classList.remove('hidden');
+                        submitSpinner.classList.add('hidden');
+                    });
             });
 
-            // Close modal button
             closeModalBtn.addEventListener('click', () => {
                 messageModal.classList.add('hidden');
             });
