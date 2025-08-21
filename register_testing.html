@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>國際未來之星冰球學校 - 線上報名</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        .form-checkbox:checked {
+            background-color: #F97316;
+            border-color: #F97316;
+        }
+        /* Custom scrollbar for better aesthetics */
+        .date-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .date-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .date-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .date-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
+        
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <div class="inline-block bg-blue-600 text-white p-4 rounded-lg shadow-lg">
+                <h1 class="text-3xl md:text-4xl font-bold">國際未來之星冰球學校</h1>
+                <p class="text-lg md:text-xl mt-1">International Future Stars Ice Hockey Academy</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl">
+            
+            <!-- Information Section -->
+            <div class="mb-8 p-4 border border-blue-200 bg-blue-50 rounded-lg">
+                <h2 class="text-2xl font-bold text-blue-800 mb-3">報名須知</h2>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><span class="font-semibold">上課方式：</span>採小班制，一位教練授課4至6位球員。</li>
+                    <li><span class="font-semibold">上課費用：</span> (註：新台幣)
+                        <ul class="list-['-_'] list-inside ml-4">
+                            <li>早鳥班 (08:35-09:45): <span class="font-bold text-orange-600">1000元/人</span></li>
+                            <li>早班 (10:30-12:00): <span class="font-bold text-orange-600">1200元/人</span></li>
+                            <li>午班 (12:20-14:20): <span class="font-bold text-orange-600">1500元/人</span></li>
+                        </ul>
+                    </li>
+                    <li><span class="font-semibold">優惠方案：</span>一次報名 <span class="font-bold text-green-600">20</span> 堂課(含)以上，總費用享 <span class="font-bold text-green-600">9折</span> 優惠。</li>
+                </ul>
+            </div>
+
+            <!-- Registration Form -->
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">線上報名表</h2>
+            <form id="registrationForm">
+                <!-- Hidden field to prevent backend from writing 'N/A' for teamName -->
+                <input type="hidden" name="teamName" value=" ">
+
+                <!-- Personal Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="studentName" class="block text-sm font-medium text-gray-700 mb-1">學員姓名 *</label>
+                        <input type="text" id="studentName" name="studentName" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="parentName" class="block text-sm font-medium text-gray-700 mb-1">家長姓名 *</label>
+                        <input type="text" id="parentName" name="parentName" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">聯絡電話 *</label>
+                        <input type="tel" id="phone" name="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">電子郵件 *</label>
+                        <input type="email" id="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Student Position -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">學員位置 *</label>
+                    <div class="flex items-center space-x-4 mt-2">
+                        <label class="flex items-center">
+                            <input type="radio" name="position" value="Player" required class="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                            <span class="ml-2 text-gray-700">球員 (Player)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="position" value="Goalie" class="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                            <span class="ml-2 text-gray-700">守門員 (Goalie)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Class Selection -->
+                <div class="mb-6 p-4 border border-gray-200 bg-gray-50 rounded-md">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">選擇上課日期 *</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4">
+                        <!-- Super Morning Dates -->
+                        <div>
+                            <p class="font-semibold mb-2 text-gray-800">早鳥班 (08:30 - 9:45)</p>
+                            <div id="super-morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
+                                <!-- Super morning dates will be injected here by JS -->
+                            </div>
+                        </div>
+                        <!-- Morning Dates -->
+                        <div>
+                            <p class="font-semibold mb-2 text-gray-800">早班 (10:30 - 12:00)</p>
+                            <div id="morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
+                                <!-- Morning dates will be injected here by JS -->
+                            </div>
+                        </div>
+                        <!-- Afternoon Dates -->
+                        <div>
+                            <p class="font-semibold mb-2 text-gray-800">午班 (12:20 - 14:20)</p>
+                            <div id="afternoon-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
+                                <!-- Afternoon dates will be injected here by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fee Calculation -->
+                <div id="fee-summary" class="mb-6 p-4 border-l-4 border-orange-500 bg-orange-50 rounded-md hidden">
+                    <h3 class="text-lg font-bold text-gray-800">費用總計</h3>
+                    <p class="text-gray-600">已選擇 <span id="selected-count" class="font-bold text-blue-600">0</span> 堂課</p>
+                    <p id="discount-info" class="text-green-600 text-sm font-semibold hidden">已套用20堂課9折優惠！</p>
+                    <p class="text-gray-800 mt-2">原始費用: <span id="original-fee" class="font-semibold line-through">0</span> 元</p>
+                    <p class="text-2xl font-bold text-orange-600 mt-1">應繳總額: <span id="total-fee">0</span> 元</p>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-8 text-center">
+                    <button type="submit" id="submit-button" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none">
+                        <span id="submit-text">送出報名</span>
+                        <span id="submit-spinner" class="hidden">處理中...</span>
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- Success/Error Modal -->
+    <div id="message-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div id="modal-icon" class="mx-auto flex items-center justify-center h-12 w-12 rounded-full">
+                    <!-- Icon will be inserted here -->
+                </div>
+                <h3 id="modal-title" class="text-lg leading-6 font-medium text-gray-900 mt-2"></h3>
+                <div class="mt-2 px-7 py-3">
+                    <p id="modal-message" class="text-sm text-gray-500"></p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button id="close-modal-btn" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        關閉
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- CONFIGURATION ---
+            //const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywXCfspGojVj_vv1lV4p_ASVmXDG5MJr1zXZCQ9OK1e_Gk-0kypu33YzmRnSaBBoaEoA/exec';
+            const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx640TOpXKy5upQkhFAYacl2hXuAbiXm8uCVt373IDToe7gxhWEP_x5i-EAfnfxGO-ZjQ/exec';
+
+            const superMorningDates = ['9/27', '10/4', '10/25'];
+            const morningDates = ['9/14', '9/27', '9/28', '10/4', '10/5', '10/12', '10/25', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
+            const afternoonDates = ['9/13', '9/14', '9/27', '9/28', '10/25', '10/26', '11/16', '11/22', '11/23', '12/6', '12/7', '1/10', '1/11'];
+            
+            const superMorningFee = 1000;
+            const morningFee = 1200;
+            const afternoonFee = 1500;
+            const discountThreshold = 20;
+            const discountRate = 0.9;
+
+            // --- DOM ELEMENTS ---
+            const superMorningDatesContainer = document.getElementById('super-morning-dates');
+            const form = document.getElementById('registrationForm');
+            const morningDatesContainer = document.getElementById('morning-dates');
+            const afternoonDatesContainer = document.getElementById('afternoon-dates');
+            const feeSummary = document.getElementById('fee-summary');
+            const selectedCountEl = document.getElementById('selected-count');
+            const originalFeeEl = document.getElementById('original-fee');
+            const totalFeeEl = document.getElementById('total-fee');
+            const discountInfo = document.getElementById('discount-info');
+            const submitButton = document.getElementById('submit-button');
+            const submitText = document.getElementById('submit-text');
+            const submitSpinner = document.getElementById('submit-spinner');
+
+            // --- MODAL ELEMENTS ---
+            const messageModal = document.getElementById('message-modal');
+            const modalIcon = document.getElementById('modal-icon');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+
+            // --- FUNCTIONS ---
+
+            function getDayOfWeek(dateStr) {
+                const [month, day] = dateStr.split('/').map(Number);
+                // *** BUG FIX: Correctly set year for cross-year courses ***
+                // Based on current date of 2025, courses in Sep-Dec are 2025, Jan is 2026.
+                const currentYear = new Date().getFullYear(); // e.g., 2025
+                const year = month >= 9 ? currentYear : currentYear + 1;
+                
+                const dateObj = new Date(Date.UTC(year, month - 1, day));
+                const dayIndex = dateObj.getUTCDay();
+                const days = ['日', '一', '二', '三', '四', '五', '六'];
+                return `週${days[dayIndex]}`;
+            }
+
+            function populateDates(container, dates, sessionName) {
+                container.innerHTML = '';
+                dates.forEach(date => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center';
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.id = `${sessionName}-${date.replace('/', '-')}`;
+                    input.name = `${sessionName}Dates`; // Differentiate morning and afternoon dates
+                    input.value = date;
+                    input.className = 'form-checkbox h-4 w-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500';
+                    
+                    const dayOfWeek = getDayOfWeek(date);
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = input.id;
+                    label.textContent = `${date} (${dayOfWeek})`;
+                    label.className = 'ml-2 text-sm text-gray-600';
+                    div.appendChild(input);
+                    div.appendChild(label);
+                    container.appendChild(div);
+                });
+            }
+
+            function calculateFee() {
+                const selectedSuperMorning = document.querySelectorAll('input[name="superMorningDates"]:checked');
+                const selectedMorning = document.querySelectorAll('input[name="morningDates"]:checked');
+                const selectedAfternoon = document.querySelectorAll('input[name="afternoonDates"]:checked');
+                
+                const superMorningCount = selectedSuperMorning.length;
+                const morningCount = selectedMorning.length;
+                const afternoonCount = selectedAfternoon.length;
+                const totalCount = superMorningCount + morningCount + afternoonCount;
+
+                if (totalCount === 0) {
+                    feeSummary.classList.add('hidden');
+                    return;
+                }
+
+                feeSummary.classList.remove('hidden');
+                selectedCountEl.textContent = totalCount;
+
+                const originalSuperMorningFee = superMorningCount * superMorningFee;
+                const originalMorningFee = morningCount * morningFee;
+                const originalAfternoonFee = afternoonCount * afternoonFee;
+                const originalTotalFee = originalSuperMorningFee + originalMorningFee + originalAfternoonFee;
+
+                let finalTotalFee = originalTotalFee;
+
+                if (totalCount >= discountThreshold) {
+                    finalTotalFee = Math.round(originalTotalFee * discountRate);
+                    discountInfo.classList.remove('hidden');
+                    originalFeeEl.parentElement.classList.remove('hidden'); // Show original fee line
+                    originalFeeEl.textContent = originalTotalFee;
+                } else {
+                    discountInfo.classList.add('hidden');
+                    originalFeeEl.parentElement.classList.add('hidden'); // Hide original fee line
+                }
+                
+                totalFeeEl.textContent = finalTotalFee;
+            }
+
+            function showModal(type, title, message) {
+                messageModal.classList.remove('hidden');
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+
+                if (type === 'success') {
+                    modalIcon.innerHTML = `<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                    modalIcon.className = 'mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-500';
+                } else {
+                    modalIcon.innerHTML = `<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                    modalIcon.className = 'mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-500';
+                }
+            }
+
+            // --- EVENT LISTENERS ---
+            form.addEventListener('change', (e) => {
+                if (e.target.name === 'superMorningDates' || e.target.name === 'morningDates' || e.target.name === 'afternoonDates') {
+                    calculateFee();
+                }
+            });
+
+            // *** BUG FIX: Changed to async function for sequential submission ***
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const selectedSuperMorning = document.querySelectorAll('input[name="superMorningDates"]:checked');
+                const selectedMorning = document.querySelectorAll('input[name="morningDates"]:checked');
+                const selectedAfternoon = document.querySelectorAll('input[name="afternoonDates"]:checked');
+                
+                const totalCount = selectedSuperMorning.length + selectedMorning.length + selectedAfternoon.length;
+
+                if (totalCount === 0) {
+                    showModal('error', '報名錯誤', '請至少選擇 1 堂課。');
+                    return;
+                }
+                
+                if (GOOGLE_APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
+                    showModal('error', '設定錯誤', '後端URL尚未設定，請聯繫管理員。');
+                    return;
+                }
+
+                submitButton.disabled = true;
+                submitText.classList.add('hidden');
+                submitSpinner.classList.remove('hidden');
+
+                const formData = new FormData(form);
+                const baseData = Object.fromEntries(formData.entries());
+                delete baseData.superMorningDates;
+                delete baseData.morningDates;
+                delete baseData.afternoonDates;
+                
+                const applyDiscount = totalCount >= discountThreshold;
+                
+                const recordsToSend = [];
+
+                // Prepare all superMorning class records
+                selectedSuperMorning.forEach(checkbox => {
+                    // 解析 month/date
+                    const [month, day] = checkbox.value.split("/").map(Number);
+
+                    // 決定年份
+                    const year = (month >= 9 && month <= 12) ? 2025 : 2026;
+
+                    // 組合成 YYYY-MM-DD 格式
+                    const fullDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+                    recordsToSend.push({
+                        ...baseData,
+                        session: 'superMorning',
+                        classDate: fullDate,
+                        classFee: applyDiscount ? Math.round(superMorningFee * discountRate) : superMorningFee,
+                        timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })
+                    });
+                });
+
+                // Prepare all morning class records
+                selectedMorning.forEach(checkbox => {
+                    // 解析 month/date
+                    const [month, day] = checkbox.value.split("/").map(Number);
+
+                    // 決定年份
+                    const year = (month >= 9 && month <= 12) ? 2025 : 2026;
+
+                    // 組合成 YYYY-MM-DD 格式
+                    const fullDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+                    recordsToSend.push({
+                        ...baseData,
+                        session: 'morning',
+                        classDate: fullDate,
+                        classFee: applyDiscount ? Math.round(morningFee * discountRate) : morningFee,
+                        timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })
+                    });
+                });
+
+                // Prepare all afternoon class records
+                selectedAfternoon.forEach(checkbox => {
+                    // 解析 month/date
+                    const [month, day] = checkbox.value.split("/").map(Number);
+
+                    // 決定年份
+                    const year = (month >= 9 && month <= 12) ? 2025 : 2026;
+
+                    // 組合成 YYYY-MM-DD 格式
+                    const fullDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+                    recordsToSend.push({
+                        ...baseData,
+                        session: 'afternoon',
+                        //classDate: checkbox.value,
+                        classDate: fullDate,
+                        classFee: applyDiscount ? Math.round(afternoonFee * discountRate) : afternoonFee,
+                        timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })
+                    });
+                });
+
+                // Send records one by one to avoid server overload
+                try {
+                    //for (const record of recordsToSend) {
+                        const res = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                            method: 'POST',
+                            //mode: 'no-cors',
+                            cache: 'no-cache',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: new URLSearchParams({ record: JSON.stringify(recordsToSend) }),
+                            //body: JSON.stringify(recordsToSend)
+                        });
+                        // Optional: add a small delay between requests if needed
+                        // await new Promise(resolve => setTimeout(resolve, 50)); 
+                    //}
+                    
+                    //
+                    //const text = await res.text();
+                    const data = await res.json();
+                    if (data.status === 'success') {
+                    // If all submissions are sent
+                        showModal('success', '報名成功！', `您已成功報名 ${totalCount} 堂課。我們將盡快與您聯繫確認。`);
+                        form.reset();
+                        feeSummary.classList.add('hidden');
+                    } else {
+                        throw new Error(`Server error! response: ${JSON.stringify(data)}`);
+                    }
+
+                } catch (error) {
+                    console.error('Submission Error:', error);
+                    showModal('error', '報名失敗', '部分或全部資料提交失敗，請稍後再試或直接與我們聯繫。');
+                } finally {
+                    submitButton.disabled = false;
+                    submitText.classList.remove('hidden');
+                    submitSpinner.classList.add('hidden');
+                }
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                messageModal.classList.add('hidden');
+            });
+
+            // --- INITIALIZATION ---
+            populateDates(superMorningDatesContainer, superMorningDates, 'superMorning');
+            populateDates(morningDatesContainer, morningDates, 'morning');
+            populateDates(afternoonDatesContainer, afternoonDates, 'afternoon');
+        });
+    </script>
+</body>
+</html>
