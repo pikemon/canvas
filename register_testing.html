@@ -53,7 +53,7 @@
                     <li><span class="font-semibold">上課方式：</span>採小班制，一位教練授課4至6位球員。</li>
                     <li><span class="font-semibold">上課費用：</span> (註：新台幣)
                         <ul class="list-['-_'] list-inside ml-4">
-                            <li>早鳥班 (08:35-09:45): <span class="font-bold text-orange-600">1000元/人</span></li>
+                            <li>早鳥班 (08:35-09:45): <span class="font-bold text-orange-600">900元/人</span></li>
                             <li>早班 (10:30-12:00): <span class="font-bold text-orange-600">1200元/人</span></li>
                             <li>午班 (12:20-14:20): <span class="font-bold text-orange-600">1500元/人</span></li>
                         </ul>
@@ -110,21 +110,21 @@
                         <!-- Super Morning Dates -->
                         <div>
                             <p class="font-semibold mb-2 text-gray-800">早鳥班 (08:30 - 9:45)</p>
-                            <div id="super-morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
+                            <div id="super-morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-80 overflow-y-auto pr-2 border-t pt-2">
                                 <!-- Super morning dates will be injected here by JS -->
                             </div>
                         </div>
                         <!-- Morning Dates -->
                         <div>
                             <p class="font-semibold mb-2 text-gray-800">早班 (10:30 - 12:00)</p>
-                            <div id="morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
+                            <div id="morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-80 overflow-y-auto pr-2 border-t pt-2">
                                 <!-- Morning dates will be injected here by JS -->
                             </div>
                         </div>
                         <!-- Afternoon Dates -->
                         <div>
                             <p class="font-semibold mb-2 text-gray-800">午班 (12:20 - 14:20)</p>
-                            <div id="afternoon-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
+                            <div id="afternoon-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-80 overflow-y-auto pr-2 border-t pt-2">
                                 <!-- Afternoon dates will be injected here by JS -->
                             </div>
                         </div>
@@ -178,11 +178,11 @@
             //const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywXCfspGojVj_vv1lV4p_ASVmXDG5MJr1zXZCQ9OK1e_Gk-0kypu33YzmRnSaBBoaEoA/exec';
             const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx640TOpXKy5upQkhFAYacl2hXuAbiXm8uCVt373IDToe7gxhWEP_x5i-EAfnfxGO-ZjQ/exec';
 
-            const superMorningDates = ['9/27', '10/4', '10/25'];
-            const morningDates = ['9/14', '9/27', '9/28', '10/4', '10/5', '10/12', '10/25', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
+            const superMorningDates = ['9/13', '9/27', '10/25', '11/16', '11/22', '12/6', '12/20'];
+            const morningDates = ['9/14', '9/27', '9/28', '10/5', '10/12', '10/25', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
             const afternoonDates = ['9/13', '9/14', '9/27', '9/28', '10/25', '10/26', '11/16', '11/22', '11/23', '12/6', '12/7', '1/10', '1/11'];
             
-            const superMorningFee = 1000;
+            const superMorningFee = 900;
             const morningFee = 1200;
             const afternoonFee = 1500;
             const discountThreshold = 20;
