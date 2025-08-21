@@ -51,8 +51,9 @@
                 <h2 class="text-2xl font-bold text-blue-800 mb-3">報名須知</h2>
                 <ul class="list-disc list-inside space-y-2 text-gray-700">
                     <li><span class="font-semibold">上課方式：</span>採小班制，一位教練授課4至6位球員。</li>
-                    <li><span class="font-semibold">上課費用：</span>
+                    <li><span class="font-semibold">上課費用：</span> (註：新台幣)
                         <ul class="list-['-_'] list-inside ml-4">
+                            <li>早鳥班 (08:35-09:45): <span class="font-bold text-orange-600">900元/人</span></li>
                             <li>早班 (10:30-12:00): <span class="font-bold text-orange-600">1200元/人</span></li>
                             <li>午班 (12:20-14:20): <span class="font-bold text-orange-600">1500元/人</span></li>
                         </ul>
@@ -105,18 +106,25 @@
                 <!-- Class Selection -->
                 <div class="mb-6 p-4 border border-gray-200 bg-gray-50 rounded-md">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">選擇上課日期 *</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4">
+                        <!-- Super Morning Dates -->
+                        <div>
+                            <p class="font-semibold mb-2 text-gray-800">早鳥班 (08:30 - 9:45)</p>
+                            <div id="super-morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-80 overflow-y-auto pr-2 border-t pt-2">
+                                <!-- Super morning dates will be injected here by JS -->
+                            </div>
+                        </div>
                         <!-- Morning Dates -->
                         <div>
                             <p class="font-semibold mb-2 text-gray-800">早班 (10:30 - 12:00)</p>
-                            <div id="morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
+                            <div id="morning-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-80 overflow-y-auto pr-2 border-t pt-2">
                                 <!-- Morning dates will be injected here by JS -->
                             </div>
                         </div>
                         <!-- Afternoon Dates -->
                         <div>
                             <p class="font-semibold mb-2 text-gray-800">午班 (12:20 - 14:20)</p>
-                            <div id="afternoon-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-48 overflow-y-auto pr-2 border-t pt-2">
+                            <div id="afternoon-dates" class="grid grid-cols-2 sm:grid-cols-3 gap-3 date-container max-h-80 overflow-y-auto pr-2 border-t pt-2">
                                 <!-- Afternoon dates will be injected here by JS -->
                             </div>
                         </div>
@@ -170,15 +178,21 @@
             const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywXCfspGojVj_vv1lV4p_ASVmXDG5MJr1zXZCQ9OK1e_Gk-0kypu33YzmRnSaBBoaEoA/exec';
             //const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx640TOpXKy5upQkhFAYacl2hXuAbiXm8uCVt373IDToe7gxhWEP_x5i-EAfnfxGO-ZjQ/exec';
 
-            const morningDates = ['9/14', '9/27', '9/28', '10/4', '10/5', '10/12', '10/25', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
-            const afternoonDates = ['9/13', '9/14', '9/27', '9/28', '10/25', '10/26', '11/16', '11/22', '11/23', '12/6', '12/7', '1/10', '1/11'];
+            //const superMorningDates = ['9/13', '9/27', '10/25', '11/16', '11/22', '12/6', '12/20'];
+            const superMorningDates = ['9/13', '9/27', '10/25', '11/15', '11/22', '12/6', '12/20'];
+            //const morningDates = ['9/14', '9/27', '9/28', '10/5', '10/12', '10/25', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
+            const morningDates = ['9/27', '10/4', '10/25', '9/14', '9/28', '10/5', '10/12', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
+            //const afternoonDates = ['9/13', '9/14', '9/27', '9/28', '10/25', '10/26', '11/16', '11/22', '11/23', '12/6', '12/7', '1/10', '1/11'];
+            const afternoonDates = ['9/13', '9/27', '10/25', '11/22', '12/6', '1/10', '9/14', '9/28', '10/26', '11/16', '11/23', '12/7', '1/11'];
             
+            const superMorningFee = 900;
             const morningFee = 1200;
             const afternoonFee = 1500;
             const discountThreshold = 20;
             const discountRate = 0.9;
 
             // --- DOM ELEMENTS ---
+            const superMorningDatesContainer = document.getElementById('super-morning-dates');
             const form = document.getElementById('registrationForm');
             const morningDatesContainer = document.getElementById('morning-dates');
             const afternoonDatesContainer = document.getElementById('afternoon-dates');
@@ -230,7 +244,11 @@
                     const label = document.createElement('label');
                     label.htmlFor = input.id;
                     label.textContent = `${date} (${dayOfWeek})`;
-                    label.className = 'ml-2 text-sm text-gray-600';
+                    if (dayOfWeek == '週日') {
+                        label.className = 'ml-2 text-sm text-red-600';
+                    } else {
+                        label.className = 'ml-2 text-sm text-gray-600';
+                    }
                     div.appendChild(input);
                     div.appendChild(label);
                     container.appendChild(div);
@@ -238,12 +256,14 @@
             }
 
             function calculateFee() {
+                const selectedSuperMorning = document.querySelectorAll('input[name="superMorningDates"]:checked');
                 const selectedMorning = document.querySelectorAll('input[name="morningDates"]:checked');
                 const selectedAfternoon = document.querySelectorAll('input[name="afternoonDates"]:checked');
                 
+                const superMorningCount = selectedSuperMorning.length;
                 const morningCount = selectedMorning.length;
                 const afternoonCount = selectedAfternoon.length;
-                const totalCount = morningCount + afternoonCount;
+                const totalCount = superMorningCount + morningCount + afternoonCount;
 
                 if (totalCount === 0) {
                     feeSummary.classList.add('hidden');
@@ -253,9 +273,10 @@
                 feeSummary.classList.remove('hidden');
                 selectedCountEl.textContent = totalCount;
 
+                const originalSuperMorningFee = superMorningCount * superMorningFee;
                 const originalMorningFee = morningCount * morningFee;
                 const originalAfternoonFee = afternoonCount * afternoonFee;
-                const originalTotalFee = originalMorningFee + originalAfternoonFee;
+                const originalTotalFee = originalSuperMorningFee + originalMorningFee + originalAfternoonFee;
 
                 let finalTotalFee = originalTotalFee;
 
@@ -288,7 +309,7 @@
 
             // --- EVENT LISTENERS ---
             form.addEventListener('change', (e) => {
-                if (e.target.name === 'morningDates' || e.target.name === 'afternoonDates') {
+                if (e.target.name === 'superMorningDates' || e.target.name === 'morningDates' || e.target.name === 'afternoonDates') {
                     calculateFee();
                 }
             });
@@ -297,10 +318,11 @@
             form.addEventListener('submit', async function (e) {
                 e.preventDefault();
 
+                const selectedSuperMorning = document.querySelectorAll('input[name="superMorningDates"]:checked');
                 const selectedMorning = document.querySelectorAll('input[name="morningDates"]:checked');
                 const selectedAfternoon = document.querySelectorAll('input[name="afternoonDates"]:checked');
                 
-                const totalCount = selectedMorning.length + selectedAfternoon.length;
+                const totalCount = selectedSuperMorning.length + selectedMorning.length + selectedAfternoon.length;
 
                 if (totalCount === 0) {
                     showModal('error', '報名錯誤', '請至少選擇 1 堂課。');
@@ -318,12 +340,33 @@
 
                 const formData = new FormData(form);
                 const baseData = Object.fromEntries(formData.entries());
+                delete baseData.superMorningDates;
                 delete baseData.morningDates;
                 delete baseData.afternoonDates;
                 
                 const applyDiscount = totalCount >= discountThreshold;
                 
                 const recordsToSend = [];
+
+                // Prepare all superMorning class records
+                selectedSuperMorning.forEach(checkbox => {
+                    // 解析 month/date
+                    const [month, day] = checkbox.value.split("/").map(Number);
+
+                    // 決定年份
+                    const year = (month >= 9 && month <= 12) ? 2025 : 2026;
+
+                    // 組合成 YYYY-MM-DD 格式
+                    const fullDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+                    recordsToSend.push({
+                        ...baseData,
+                        session: 'superMorning',
+                        classDate: fullDate,
+                        classFee: applyDiscount ? Math.round(superMorningFee * discountRate) : superMorningFee,
+                        timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })
+                    });
+                });
 
                 // Prepare all morning class records
                 selectedMorning.forEach(checkbox => {
@@ -408,6 +451,7 @@
             });
 
             // --- INITIALIZATION ---
+            populateDates(superMorningDatesContainer, superMorningDates, 'superMorning');
             populateDates(morningDatesContainer, morningDates, 'morning');
             populateDates(afternoonDatesContainer, afternoonDates, 'afternoon');
         });
