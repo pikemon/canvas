@@ -178,9 +178,12 @@
             //const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywXCfspGojVj_vv1lV4p_ASVmXDG5MJr1zXZCQ9OK1e_Gk-0kypu33YzmRnSaBBoaEoA/exec';
             const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx640TOpXKy5upQkhFAYacl2hXuAbiXm8uCVt373IDToe7gxhWEP_x5i-EAfnfxGO-ZjQ/exec';
 
-            const superMorningDates = ['9/13', '9/27', '10/25', '11/16', '11/22', '12/6', '12/20'];
-            const morningDates = ['9/14', '9/27', '9/28', '10/5', '10/12', '10/25', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
-            const afternoonDates = ['9/13', '9/14', '9/27', '9/28', '10/25', '10/26', '11/16', '11/22', '11/23', '12/6', '12/7', '1/10', '1/11'];
+            //const superMorningDates = ['9/13', '9/27', '10/25', '11/16', '11/22', '12/6', '12/20'];
+            const superMorningDates = ['9/13', '9/27', '10/25', '11/22', '12/6', '12/20', '11/16'];
+            //const morningDates = ['9/14', '9/27', '9/28', '10/5', '10/12', '10/25', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
+            const morningDates = ['9/27', '10/25', '9/14', '9/28', '10/5', '10/12', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
+            //const afternoonDates = ['9/13', '9/14', '9/27', '9/28', '10/25', '10/26', '11/16', '11/22', '11/23', '12/6', '12/7', '1/10', '1/11'];
+            const afternoonDates = ['9/13', '9/27', '10/25', '11/22', '12/6', '1/10', '9/14', '9/28', '10/26', '11/16', '11/23', '12/7', '1/11'];
             
             const superMorningFee = 900;
             const morningFee = 1200;
@@ -241,7 +244,11 @@
                     const label = document.createElement('label');
                     label.htmlFor = input.id;
                     label.textContent = `${date} (${dayOfWeek})`;
-                    label.className = 'ml-2 text-sm text-gray-600';
+                    if (dayOfWeek == '週日') {
+                        label.className = 'ml-2 text-sm text-red-600';
+                    } else {
+                        label.className = 'ml-2 text-sm text-gray-600';
+                    }
                     div.appendChild(input);
                     div.appendChild(label);
                     container.appendChild(div);
