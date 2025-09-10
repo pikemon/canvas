@@ -182,9 +182,11 @@
             const superMorningDates = ['9/13', '9/27', '10/25', '11/15', '11/22', '12/6', '12/20'];
             //const morningDates = ['9/14', '9/27', '9/28', '10/5', '10/12', '10/25', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
             //const morningDates = ['9/27', '10/4', '10/25', '9/14', '9/28', '10/5', '10/12', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
-            const morningDates = ['9/14', '9/28', '10/12', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
+            const morningDates = ['9/27', '9/14', '9/28', '10/12', '10/26', '11/16', '11/23', '12/7', '12/21', '1/11'];
             //const afternoonDates = ['9/13', '9/14', '9/27', '9/28', '10/25', '10/26', '11/16', '11/22', '11/23', '12/6', '12/7', '1/10', '1/11'];
             const afternoonDates = ['9/13', '10/25', '11/22', '12/6', '1/10', '9/14', '9/28', '10/26', '11/16', '11/23', '12/7', '1/11'];
+
+            const disableDates = ['9/13', '9/14'];
             
             const superMorningFee = 900;
             const morningFee = 1200;
@@ -238,6 +240,9 @@
                     input.id = `${sessionName}-${date.replace('/', '-')}`;
                     input.name = `${sessionName}Dates`; // Differentiate morning and afternoon dates
                     input.value = date;
+                    if (disableDates.includes(date)) {
+                        input.disabled = true;
+                    }
                     input.className = 'form-checkbox h-4 w-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500';
                     
                     const dayOfWeek = getDayOfWeek(date);
